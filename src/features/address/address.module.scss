@@ -1,0 +1,160 @@
+.container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff6b35;
+}
+
+.formContainer {
+  flex: 1;
+  padding: 20px 16px;
+  background-color: #fff;
+}
+
+.saveAsSection {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.nameInput {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+.mobileNumber {
+  padding: 12px 14px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.searchContainer {
+  position: relative;
+  margin-bottom: 24px;
+
+  .searchInput {
+    width: 100%;
+    padding: 14px 16px 14px 40px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 15px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>') no-repeat 14px center;
+    background-size: 16px;
+  }
+
+  .poweredBy {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: #888;
+  }
+}
+
+.addressFields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+
+  .input {
+    padding: 14px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #fff;
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+
+    .halfInput {
+      flex: 1;
+      padding: 14px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+  }
+}
+
+.saveButton {
+  width: 100%;
+  padding: 16px;
+  background-color: #ff6b35;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #e55a2b;
+  }
+}
+
+.bottomNav {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+
+  .navItem {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    padding: 8px;
+  }
+}
