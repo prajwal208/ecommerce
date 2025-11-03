@@ -43,7 +43,7 @@ const Address = () => {
           headers: {
             "x-api-key":
               "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
-            Authorization: "Bearer YOUR_BEARER_TOKEN_HERE",
+            Authorization: `Bearer ${NEXT_PUBLIC_TOKEN}`,
           },
         }
       );

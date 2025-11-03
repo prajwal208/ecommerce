@@ -11,7 +11,6 @@ const ProductSection = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  // 🟩 Fetch Subcategories
   const getSubCategoriesList = async () => {
     try {
       const res = await axios.get(
@@ -21,7 +20,7 @@ const ProductSection = () => {
             "x-api-key":
               "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
             Authorization:
-              "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjU0NTEzMjA5OWFkNmJmNjEzODJiNmI0Y2RlOWEyZGZlZDhjYjMwZjAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcHJpbnRlYXN5LTY4YzYxIiwiYXVkIjoicHJpbnRlYXN5LTY4YzYxIiwiYXV0aF90aW1lIjoxNzYyMTk1Mjg3LCJ1c2VyX2lkIjoidGVzdC11c2VyLTEyMyIsInN1YiI6InRlc3QtdXNlci0xMjMiLCJpYXQiOjE3NjIxOTUyODcsImV4cCI6MTc2MjE5ODg4NywiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.bCUzodK8qMKoMKWFHfwv2bXJNo4T_yL39d65WfHXS_hZzxtKFBkB61j5M87EfqndRMcP60ZeRIdVk-jWnJSrgFK1zxRRQP_SC9bil_eZuy0y4SztGIzJIpr_5BliGZ7oEV8rwIpySVqkW6sTtjivjws1IlMuXsdhtdvTU38ZF0H1A17Pq-ngxWrR6OG9mO87bforTg-kqukbydouijcgx319DjCssEtaGEvcgKSPq6Sk3UXhaovmjY-Yt6KPM0yqrvCVKqBQEeYqJX-cO_uK5HKeghnNL7K1377Y66WX4uqkQfvZ9qjLz3s0dx1hbP5jfLNll8O4C7VYf5kKWev2OQ"
+             `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`
           },
         }
       );
@@ -44,7 +43,7 @@ const ProductSection = () => {
             "x-api-key":
               "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
             Authorization:
-              "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjU0NTEzMjA5OWFkNmJmNjEzODJiNmI0Y2RlOWEyZGZlZDhjYjMwZjAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcHJpbnRlYXN5LTY4YzYxIiwiYXVkIjoicHJpbnRlYXN5LTY4YzYxIiwiYXV0aF90aW1lIjoxNzYyMTg4NTgxLCJ1c2VyX2lkIjoidGVzdC11c2VyLTEyMyIsInN1YiI6InRlc3QtdXNlci0xMjMiLCJpYXQiOjE3NjIxODg1ODEsImV4cCI6MTc2MjE5MjE4MSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJjdXN0b20ifX0.Y7ko8DnNBqNaV4OFIzILn06ZiKO44ZuPEmf0yxKsyoTalXQeZ671kbt6soCZkWSC977EtYNl6QR0YnabaXYonqml27I_oNiaHmlBZvT-EbRSTTjFpBJHcsvSjY1odqz1LgdXmGhrSryvSiUMU9klcBnO2hAG0Ps4981JfmUpqxfYmqGqQVVagWcw_tf5dK8GQGopRxo781hbboirJpRiMxt-NeXtHApaniT8b91toFgt1m-bYXmnDP0fK4u9Kzmhuq5NbwNspPTwXrjk_DFUr5tb8jeKyEIbTlUUfAS91eT7QVzTuEGgRqxmpxi4YZ-yZCYyqYuCU_9CRwmF8kjEiA",
+              `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`
           },
         }
       );

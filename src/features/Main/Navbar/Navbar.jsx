@@ -31,7 +31,7 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { icon: User, label: "Profile", link: "/profile" },
+    { icon: User, label: "Profile", link: "/" },
     { icon: Briefcase, label: "Orders", link: "/orders" },
     { icon: MapPin, label: "Address", link: "/address" },
     { icon: Heart, label: "Wishlist", link: "/wishlist" },
@@ -54,7 +54,7 @@ const Navbar = () => {
   return (
     <>
       <nav className={styles.nav}>
-        <header className={styles.logoWrapper}>
+        <header className={styles.logoWrapper} onClick={() => router.push("/")}>
           <Image src={logo} alt="logo" className={styles.logo} />
         </header>
 
