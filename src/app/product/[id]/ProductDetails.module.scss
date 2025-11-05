@@ -82,9 +82,12 @@
       font-size: 0.9rem;
       border-radius: 4px;
 
+      &:hover {
+        background: #f8f8f8;
+      }
     }
 
-    .activeSize{
+    .activeSize {
       border: 2px solid #c55f17;
     }
   }
@@ -105,27 +108,56 @@
     }
   }
 
-  .details,
-  .care {
+  /* Accordion Section */
+  .accordion {
+    border-top: 1px solid #eee;
     margin-top: 1.5rem;
 
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
+    .accordionItem {
+      border-bottom: 1px solid #eee;
+      padding: 1rem 0;
 
-    p {
-      color: #444;
-      font-size: 0.95rem;
-      line-height: 1.4;
+      .accordionHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+
+        h3 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #000;
+        }
+
+        svg {
+          transition: transform 0.3s ease;
+        }
+
+        &:hover {
+          color: #c55f17;
+        }
+      }
+
+      .accordionContent {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: all 0.35s ease;
+
+        &.active {
+          max-height: 500px; /* allows space for content */
+          opacity: 1;
+          transform: translateY(0);
+          margin-top: 0.8rem;
+        }
+
+        p {
+          color: #444;
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+      }
     }
   }
-}
-
-/* LOADING STATE */
-.loading {
-  text-align: center;
-  padding: 5rem;
-  font-size: 1.2rem;
 }

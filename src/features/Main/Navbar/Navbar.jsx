@@ -39,7 +39,7 @@ const Navbar = () => {
   ];
 
   const handleIconClick = (label, link) => {
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       setIsLoginModalVisible(true);
     } else {
       router.push(link);

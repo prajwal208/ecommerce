@@ -40,41 +40,40 @@ const Address = () => {
     form.state &&
     form.pinCode;
 
-  // 🟢 Add or update address
-  const postNewAddress = async () => {
-    if (!isFormValid) return;
-    setIsSubmitting(true);
-    try {
-      const method = selectedAddressId ? "patch" : "put"; // 👈 update if editing
-      const url = selectedAddressId
-        ? `${apiUrl}/v1/address/${selectedAddressId}`
-        : `${apiUrl}/v1/address`;
+ const postNewAddress = async () => {
+  if (!isFormValid) return;
+  setIsSubmitting(true);
 
-      const res = await axios[method](
-        url,
-        { ...form },
-        {
-          headers: {
-            "x-api-key":
-              "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
-        }
-      );
+  try {
+    const method = selectedAddressId ? "patch" : "put";
+    const url = selectedAddressId
+      ? `${apiUrl}/v1/address?addressId=${selectedAddressId}`
+      : `${apiUrl}/v1/address`;
 
-      if (res.status === 200) {
-        alert(selectedAddressId ? "Address updated!" : "Address saved!");
-        resetForm();
-        getAddressList();
-        setShowForm(false);
-        setSelectedAddressId(null);
-      }
-    } catch (error) {
-      console.error("Error saving address:", error.response?.data || error);
-    } finally {
-      setIsSubmitting(false);
+    const payload = { ...form };
+
+    const res = await axios[method](url, payload, {
+      headers: {
+        "x-api-key":
+          "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+      },
+    });
+
+    if (res.status === 200) {
+      alert(selectedAddressId ? "Address updated successfully!" : "Address added successfully!");
+      resetForm();
+      getAddressList();
+      setShowForm(false);
+      setSelectedAddressId(null);
     }
-  };
+  } catch (error) {
+    console.error("Error saving/updating address:", error.response?.data || error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const resetForm = () => {
     setForm({
@@ -194,6 +193,34 @@ const Address = () => {
     getAddressList();
   }, []);
 
+
+  const DefaultAddress = async (id) => {
+  try {
+    const res = await axios.patch(
+      `${apiUrl}/v1/address/changeDefaultAddress`,
+      { newDefaultAddressId: id },
+      {
+        headers: {
+          "x-api-key":
+            "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+        },
+      }
+    );
+
+    if (res.status === 200) {
+      alert("Default address set successfully!");
+      setDefaultAddressId(id);
+      setActiveMenuId(null);
+      getAddressList();
+    }
+  } catch (error) {
+    console.error("Error setting default address:", error.response?.data || error);
+  }
+};
+
+ 
+
   return (
     <div className={styles.container}>
       {addressList.length > 0 && !showForm && (
@@ -237,7 +264,7 @@ const Address = () => {
                   ⋯
                   {activeMenuId === address.id && (
                     <div className={styles.menuDropdown}>
-                      <p onClick={() => setDefaultAddress(address.id)}>
+                      <p onClick={() => DefaultAddress(address.id)}>
                         Set as Default
                       </p>
                       <p onClick={() => handleEdit(address)}>Edit</p>

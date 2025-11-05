@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import { nanoid } from "nanoid";
+import { Plus, Minus } from "lucide-react";
 import styles from "./ProductDetails.module.scss";
 
 const ProductDetails = () => {
@@ -13,6 +14,7 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const ProductDetails = () => {
   if (!product) return <div className={styles.loading}>Loading...</div>;
 
   const addToCart = async (product, selectedOptions, quantity = 1) => {
-    const price = product.basePrice; // base price only
+    const price = product.basePrice;
     const totalPrice = price * quantity;
 
     const payload = {
@@ -58,13 +60,10 @@ const ProductDetails = () => {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
       });
-
-      console.log("✅ Added to cart:", res.data);
       alert("Item added to cart successfully!");
-      setLoading(false);
-      return res.data;
     } catch (err) {
-      console.error("❌ Error adding to cart:", err);
+      console.error("Error adding to cart:", err);
+    } finally {
       setLoading(false);
     }
   };
@@ -80,6 +79,10 @@ const ProductDetails = () => {
     };
 
     addToCart(product, selectedOptions, quantity);
+  };
+
+  const toggleSection = (section) => {
+    setActiveSection(activeSection === section ? null : section);
   };
 
   return (
@@ -118,7 +121,6 @@ const ProductDetails = () => {
           </div>
         )}
 
-       
         <button
           className={styles.addToCart}
           onClick={handleAddToCart}
@@ -127,15 +129,32 @@ const ProductDetails = () => {
           {loading ? "ADDING..." : "ADD TO BAG"}
         </button>
 
-        <div className={styles.details}>
-          <h3>DETAILS</h3>
-          <p>{product?.description}</p>
-        </div>
-        
-        <div className={styles.care}>
-          <h3>CARE</h3>
-          <p>{product?.care}</p>
-        </div>
+       {/* Accordion Sections */}
+<div className={styles.accordion}>
+  {[
+    { title: "DETAILS", content: product?.description },
+    { title: "CARE", content: product?.care },
+  ].map((section) => (
+    <div key={section.title} className={styles.accordionItem}>
+      <div
+        className={styles.accordionHeader}
+        onClick={() => toggleSection(section.title)}
+      >
+        <h3>{section.title}</h3>
+        {activeSection === section.title ? <Minus /> : <Plus />}
+      </div>
+
+      <div
+        className={`${styles.accordionContent} ${
+          activeSection === section.title ? styles.active : ""
+        }`}
+      >
+        <p>{section.content || "No information available."}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
       </div>
     </div>
   );
