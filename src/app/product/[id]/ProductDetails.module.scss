@@ -82,16 +82,16 @@
       font-size: 0.9rem;
       border-radius: 4px;
 
-      &:hover {
-        background: #000;
-        color: #fff;
-      }
+    }
+
+    .activeSize{
+      border: 2px solid #c55f17;
     }
   }
 
   .addToCart {
     margin-top: 1.5rem;
-    background: #000;
+    background: #ff6b00;
     color: #fff;
     border: none;
     padding: 1rem;
@@ -101,7 +101,7 @@
     width: 100%;
 
     &:hover {
-      background: #222;
+      background: #c55f17;
     }
   }
 
