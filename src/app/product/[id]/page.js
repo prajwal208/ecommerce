@@ -38,22 +38,39 @@ const ProductDetails = () => {
   if (!product) return <div className={styles.loading}>Loading...</div>;
 
   const addToCart = async (product, selectedOptions, quantity = 1) => {
-    const price = product.basePrice;
-    const totalPrice = price * quantity;
+    const basePrice = product.basePrice || 0;
+    const discountPrice = product.discountedPrice || basePrice;
+    const totalPrice = discountPrice * quantity;
 
     const payload = {
       id: nanoid(),
       productId: product.id,
       quantity,
       totalPrice,
+      basePrice,
+      discountPrice,
       categoryId: product.categoryId,
+      name: product.name,
+      imageUrl: product.productImages?.[0] || "",
+      productImageUrl: product.canvasImage || "",
       isCustomizable: product.isCustomizable,
-      options: selectedOptions,
+      sku: product.sku,
+      dimensions: {
+        height: product.dimension?.height || 0,
+        width: product.dimension?.width || 0,
+        length: product.dimension?.length || 0,
+        weight: product.dimension?.weight || 0,
+      },
+      options: [
+        {
+          value: selectedOptions?.size || "default",
+        },
+      ],
     };
 
     try {
       setLoading(true);
-      const res = await axios.post(`${apiUrl}/v1/cart`, payload, {
+      await axios.post(`${apiUrl}/v1/cart`, payload, {
         headers: {
           "x-api-key":
             "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
@@ -100,7 +117,17 @@ const ProductDetails = () => {
       <div className={styles.infoSection}>
         <h1>{product?.name}</h1>
         <p className={styles.subtitle}>{product?.subtitle}</p>
-        <p className={styles.price}>₹ {product?.basePrice}</p>
+
+        <div className={styles.priceSection}>
+          {product.discountedPrice ? (
+            <>
+              <p className={styles.discountedPrice}>₹ {product.discountedPrice}</p>
+              <p className={styles.basePrice}>₹ {product.basePrice}</p>
+            </>
+          ) : (
+            <p className={styles.price}>₹ {product.basePrice}</p>
+          )}
+        </div>
 
         {product?.configuration?.[0]?.options?.length > 0 && (
           <div className={styles.sizes}>
@@ -129,32 +156,31 @@ const ProductDetails = () => {
           {loading ? "ADDING..." : "ADD TO BAG"}
         </button>
 
-       {/* Accordion Sections */}
-<div className={styles.accordion}>
-  {[
-    { title: "DETAILS", content: product?.description },
-    { title: "CARE", content: product?.care },
-  ].map((section) => (
-    <div key={section.title} className={styles.accordionItem}>
-      <div
-        className={styles.accordionHeader}
-        onClick={() => toggleSection(section.title)}
-      >
-        <h3>{section.title}</h3>
-        {activeSection === section.title ? <Minus /> : <Plus />}
-      </div>
+        {/* Accordion Sections */}
+        <div className={styles.accordion}>
+          {[
+            { title: "DETAILS", content: product?.description },
+            { title: "CARE", content: product?.care },
+          ].map((section) => (
+            <div key={section.title} className={styles.accordionItem}>
+              <div
+                className={styles.accordionHeader}
+                onClick={() => toggleSection(section.title)}
+              >
+                <h3>{section.title}</h3>
+                {activeSection === section.title ? <Minus /> : <Plus />}
+              </div>
 
-      <div
-        className={`${styles.accordionContent} ${
-          activeSection === section.title ? styles.active : ""
-        }`}
-      >
-        <p>{section.content || "No information available."}</p>
-      </div>
-    </div>
-  ))}
-</div>
-
+              <div
+                className={`${styles.accordionContent} ${
+                  activeSection === section.title ? styles.active : ""
+                }`}
+              >
+                <p>{section.content || "No information available."}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

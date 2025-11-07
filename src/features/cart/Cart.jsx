@@ -1,90 +1,115 @@
-"use client"
-import React, { useState } from 'react';
-import { Trash2, ChevronDown } from 'lucide-react';
-import styles from './cart.module.scss';
+"use client";
+import React, { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
+import styles from "./cart.module.scss";
+import axios from "axios";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Grunge Blue Bootcut',
-      size: '36',
-      color: 'Blue',
-      quantity: 1,
-      price: 1689,
-      image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=400&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'Grunge Blue Bootcut',
-      size: '34',
-      color: 'Blue',
-      quantity: 2,
-      price: 1689,
-      image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=400&fit=crop'
-    }
-  ]);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const [cartItems, setCartItems] = useState([]);
 
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
 
   const handleQuantityChange = (id, newQuantity) => {
     if (newQuantity < 1) return;
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ));
+    setCartItems(
+      cartItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return cartItems.reduce((sum, item) => {
+      const price =
+        Number(item.price) ||
+        Number(item.totalPrice) ||
+        Number(item.product?.price) ||
+        0;
+      const qty = Number(item.quantity) || 1;
+      return sum + price * qty;
+    }, 0);
   };
 
   const bagTotal = calculateTotal();
   const couponDiscount = 0;
   const grandTotal = bagTotal - couponDiscount;
 
+  const getCartData = async () => {
+    try {
+      const res = await axios.get(`${apiUrl}/v1/cart`, {
+        headers: {
+          "x-api-key":
+            "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+        },
+      });
+      console.log(res.data.data, "🧾 Cart API Response");
+      setCartItems(res?.data?.data || []);
+    } catch (error) {
+      console.error("❌ Error fetching cart:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCartData();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`${apiUrl}/v1/cart?itemid=${id}`, {
+        headers: {
+          "x-api-key":
+            "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.cartPage}>
       <div className={styles.cartContainer}>
-        
         {/* Cart Items Section */}
         <div className={styles.cartItems}>
           {cartItems.map((item) => (
             <div key={item.id} className={styles.cartItem}>
-              
-              {/* Product Image */}
               <div className={styles.itemImage}>
-                <img 
-                  src={item.image} 
-                  alt={item.name}
-                />
+                <img src={item.imageUrl} alt={item.name} />
               </div>
 
-              {/* Product Details */}
               <div className={styles.itemDetails}>
                 <div>
                   <div className={styles.itemHeader}>
                     <h3 className={styles.itemName}>{item.name}</h3>
                     <button
-                      onClick={() => handleRemoveItem(item.id)}
+                      onClick={() => handleDelete(item.id)}
                       className={styles.removeBtn}
-                      aria-label="Remove item"
                     >
                       <Trash2 size={20} />
                     </button>
                   </div>
-                  
+
                   <div className={styles.itemMeta}>
-                    <span>{item.size} | {item.color}</span>
+                    <span>
+                      {item.options?.size} | {item.options?.color}
+                    </span>
                     <span className={styles.quantitySelector}>
-                      QTY | 
-                      <select 
+                      QTY |
+                      <select
                         value={item.quantity}
-                        onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
+                        onChange={(e) =>
+                          handleQuantityChange(
+                            item.id,
+                            parseInt(e.target.value)
+                          )
+                        }
                       >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-                          <option key={num} value={num}>{num}</option>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                          <option key={num} value={num}>
+                            {num}
+                          </option>
                         ))}
                       </select>
                     </span>
@@ -95,7 +120,9 @@ const Cart = () => {
                   <button className={styles.wishlistBtn}>
                     MOVE TO WISHLIST
                   </button>
-                  <span className={styles.itemPrice}>₹{item.price}</span>
+                  <span className={styles.itemPrice}>
+                    ₹{item.price || item.totalPrice || item.product?.price || 0}
+                  </span>
                 </div>
               </div>
             </div>
@@ -116,7 +143,7 @@ const Cart = () => {
 
             <div className={styles.priceRow}>
               <span>Shipping</span>
-              <span className={styles.priceValue}>₹{0}</span>
+              <span className={styles.priceValue}>₹0</span>
             </div>
 
             <div className={styles.grandTotalRow}>
@@ -124,9 +151,7 @@ const Cart = () => {
               <span>₹{grandTotal}</span>
             </div>
 
-            <button className={styles.payBtn}>
-              PAY ₹ {grandTotal}
-            </button>
+            <button className={styles.payBtn}>PAY ₹ {grandTotal}</button>
           </div>
         </div>
       </div>

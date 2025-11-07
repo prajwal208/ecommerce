@@ -26,7 +26,6 @@ const ProductSection = () => {
       );
 
       const fetchedCategories = res?.data?.data || [];
-      // Add “All” at the beginning
       setCategoryList([{ id: "All", name: "All" }, ...fetchedCategories]);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
