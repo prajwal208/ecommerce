@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./ProductCard.module.scss";
 import { Heart } from "lucide-react";
@@ -15,6 +15,26 @@ const ProductCard = ({ item }) => {
   const handleClick = () => {
     router.push(`/product/${item?.id}`);
   };
+
+  useEffect(() => {
+    const fetchWishlistStatus = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/v2/wishlist/${item.id}/status`, {
+          headers: {
+            "x-api-key":
+              "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+          },
+        });
+        console.log(res,"sjsjsuyy")
+        setLiked(res.data?.data?.isInWishlist || false);
+      } catch (err) {
+        console.error("Error checking wishlist status:", err);
+      }
+    };
+
+    fetchWishlistStatus();
+  }, [item.id]);
 
   const addtowishList = async (prodId) => {
     try {
