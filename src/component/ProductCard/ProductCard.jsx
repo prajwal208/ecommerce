@@ -7,11 +7,11 @@ import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const ProductCard = ({ item }) => {
+const ProductCard = ({ item,getwishList}) => {
   const [liked, setLiked] = useState(false);
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  console.log(item, "zzzznnxxyyy");
+
   const handleClick = () => {
     router.push(`/product/${item?.id}`);
   };
@@ -26,7 +26,6 @@ const ProductCard = ({ item }) => {
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
           },
         });
-        console.log(res,"sjsjsuyy")
         setLiked(res.data?.data?.isInWishlist || false);
       } catch (err) {
         console.error("Error checking wishlist status:", err);
@@ -36,23 +35,39 @@ const ProductCard = ({ item }) => {
     fetchWishlistStatus();
   }, [item.id]);
 
-  const addtowishList = async (prodId) => {
+  const toggleWishlist = async () => {
     try {
-      const res = axios.post(
-        `${apiUrl}/v2/wishlist`,
-        {
-          productId: prodId,
-        },
-        {
+      if (!liked) {
+        // Add to wishlist
+        await axios.post(
+          `${apiUrl}/v2/wishlist`,
+          { productId: item.id },
+          {
+            headers: {
+              "x-api-key":
+                "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+            },
+          }
+        );
+      } else {
+        // Remove from wishlist
+        const res = await axios.delete(`${apiUrl}/v2/wishlist/${item.id}`, {
           headers: {
             "x-api-key":
               "454ccaf106998a71760f6729e7f9edaf1df17055b297b3008ff8b65a5efd7c10",
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
           },
+        });
+        if(res?.status === 200){
+          getwishList()
         }
-      );
+      }
+
+      // Toggle local state
+      setLiked((prev) => !prev);
     } catch (error) {
-      console.log(error);
+      console.error("Error toggling wishlist:", error);
     }
   };
 
@@ -69,9 +84,8 @@ const ProductCard = ({ item }) => {
         <span
           className={`${styles.favorite} ${liked ? styles.liked : ""}`}
           onClick={(e) => {
-            e.stopPropagation();
-            addtowishList(item?.id);
-            setLiked((prev) => !prev);
+            e.stopPropagation(); // Prevent card click
+            toggleWishlist();
           }}
         >
           <Heart

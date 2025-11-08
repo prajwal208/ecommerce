@@ -28,6 +28,9 @@ const WishList = () => {
     getwishList();
   }, []);
 
+
+
+
   return (
     <>
       <main className={styles.wishlist_main}>
@@ -35,7 +38,7 @@ const WishList = () => {
         <div className={styles.cardGrid}>
           {wishlistData.length > 0 ? (
             wishlistData.map((item) => (
-              <ProductCard key={item.id} item={item} />
+              <ProductCard key={item.id} item={item} getwishList={getwishList}/>
             ))
           ) : (
             <p className={styles.noProducts}>No WishList found.</p>
