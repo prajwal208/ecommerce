@@ -1,13 +1,11 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  reactCompiler: true,
   images: {
+    unoptimized: true, // <-- DISABLES _next/image (removes 400 errors)
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*",
-      },
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
     ],
   },
 };

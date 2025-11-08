@@ -75,7 +75,7 @@ const ProductCard = ({ item,getwishList}) => {
     <div className={styles.card} onClick={handleClick}>
       <div className={styles.imageContainer}>
         <Image
-          src={item?.productImages?.[0]}
+          src={item?.canvasImage}
           alt={item?.subtitle}
           width={300}
           height={300}

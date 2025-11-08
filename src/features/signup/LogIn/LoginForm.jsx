@@ -20,20 +20,20 @@ const LoginForm = ({ onContinue }) => {
       // Get reCAPTCHA token
       const recaptchaToken = await executeRecaptcha("login");
 
-      console.log(recaptchaToken,"sjjususuu")
+      console.log(recaptchaToken, "sjjususuu");
       // Send both phone number + recaptcha token to Node backend
       const res = await axios.post(
-  `https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key=AIzaSyCw7SvFOvbWYQrUtv6CS35GatPAew3KSIk`,
-  {
-    phoneNumber: `+918861406251`,  
-    recaptchaToken,                    
-  },
-  {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }
-);
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key=AIzaSyCw7SvFOvbWYQrUtv6CS35GatPAew3KSIk`,
+        {
+          phoneNumber: `+91${phoneNumber}`,
+          recaptchaToken,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const data = await res.json();
       console.log("Backend response:", data);
@@ -71,8 +71,8 @@ const LoginForm = ({ onContinue }) => {
       </button>
 
       <p className={styles.terms}>
-        By signing in you agree to our{" "}
-        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        By signing in you agree to our <a href="#">Terms of Service</a> and{" "}
+        <a href="#">Privacy Policy</a>.
       </p>
     </div>
   );
